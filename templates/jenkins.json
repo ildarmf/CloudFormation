@@ -3,7 +3,7 @@
   "Description": "Deploy a Jenkins Server inside a VPC. Authored by Daniel Wright",
   "Parameters": {
     "dockerImage": {
-      "Default": "quay.io/simplehq/hermes:latest",
+      "Default": "quay.io/therealdwright/jenkins:latest",
       "Description": "Path of the Jenkins Docker image (format: '[<registry>[:<port>]/]<repository>:<version>')",
       "Type": "String"
     },
