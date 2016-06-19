@@ -15,9 +15,8 @@
       "Type": "String"
     },
     "keyName": {
-      "Default": "NT",
       "Description": "Name of pem file to use when launching instances",
-      "Type": "String"
+      "Type": "AWS::EC2::KeyPair::KeyName"
     },
     "privateSubnet1": {
       "Description": "Availability Zone 1 Private Subnet",
@@ -41,6 +40,7 @@
     },
     "myPublicIp": {
       "Description": "Your public IP address for Private Access",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     }
   },

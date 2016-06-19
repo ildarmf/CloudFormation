@@ -5,7 +5,7 @@
     "emailAddresses": {
       "Description": "A Group of Emails to send notification emails to",
       "Type": "CommaDelimitedList",
-      "Default": "dan@iamaman.com.au"
+      "Default": "dan@iamaman.com.au, test@iamaman.com.au, admin@iamaman.com.au"
     },
     "targetEnvironment": {
       "Default": "test",

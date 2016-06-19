@@ -42,10 +42,11 @@
     },
     "myPublicIp": {
       "Description": "Your public IP address for Private Access",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "sslCertificateId": {
-      "Description": "Your public IP address for Private Access",
+      "Description": "Enter the ARN of a valid SSL Certificate",
       "Type": "String"
     }
   },

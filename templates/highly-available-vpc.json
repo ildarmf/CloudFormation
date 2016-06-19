@@ -1,44 +1,50 @@
 {
-  "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Deploy a Highly Available VPC. Authored by Daniel Wright",
   "Parameters": {
     "VPCCIDR": {
       "Default": "10.10.0.0/16",
       "Description": "Enter the VPC CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "dbsubnet1cidr": {
       "Default": "10.10.200.0/24",
       "Description": "Enter the DB Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "dbsubnet2cidr": {
       "Default": "10.10.210.0/24",
       "Description": "Enter the DB Subnet 2 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "privatesubnet1cidr": {
       "Default": "10.10.12.0/22",
       "Description": "Enter the Private Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "privatesubnet2cidr": {
       "Default": "10.10.20.0/22",
       "Description": "Enter the Private Subnet 2 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "publicsubnet1cidr": {
       "Default": "10.10.0.0/24",
       "Description": "Enter the Public Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "publicsubnet2cidr": {
       "Default": "10.10.4.0/24",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Description": "Enter the Public Subnet 2 CIDR Block",
       "Type": "String"
     },
     "internalZoneName": {
-      "Default": "hermes.internal",
+      "Default": "something.internal",
       "Description": "Name for the Route53 Internal Zone",
       "Type": "String"
     }
@@ -388,29 +394,6 @@
           "VPCId": { "Ref": "VPC" },
           "VPCRegion": { "Ref": "AWS::Region" }
         }]
-      }
-    },
-    "apiGwServiceSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "Allow All Traffic From Tyk Elastic Load Balancer",
-        "SecurityGroupIngress": [
-          {
-            "CidrIp": { "Ref": "VPCCIDR" },
-            "FromPort": "22",
-            "IpProtocol": "tcp",
-            "ToPort": "22"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "Tyk-Service-Instance-Security-Group"
-          }
-        ],
-        "VpcId": {
-          "Ref": "VPC"
-        }
       }
     }
   },

@@ -5,51 +5,85 @@
     "VPCCIDR": {
       "Default": "10.10.0.0/16",
       "Description": "Enter the VPC CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "dbsubnet1cidr": {
       "Default": "10.10.200.0/24",
       "Description": "Enter the DB Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "dbsubnet2cidr": {
       "Default": "10.10.210.0/24",
       "Description": "Enter the DB Subnet 2 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "privatesubnet1cidr": {
       "Default": "10.10.12.0/22",
       "Description": "Enter the Private Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "privatesubnet2cidr": {
       "Default": "10.10.20.0/22",
       "Description": "Enter the Private Subnet 2 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "publicsubnet1cidr": {
       "Default": "10.10.0.0/24",
       "Description": "Enter the Public Subnet 1 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "publicsubnet2cidr": {
       "Default": "10.10.4.0/24",
       "Description": "Enter the Public Subnet 2 CIDR Block",
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
       "Type": "String"
     },
     "internalZoneName": {
-      "Default": "hermes.internal",
+      "Default": "something.internal",
       "Description": "Name for the Route53 Internal Zone",
       "Type": "String"
+    },
+    "jenkinsInstanceType": {
+      "AllowedValues": [
+        "t2.micro",
+        "t2.medium",
+        "t2.large"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type.",
+      "Default": "t2.large",
+      "Description": "EC2 instance type",
+      "Type": "String"
+    },
+    "dynamicDynamoInstanceType": {
+      "AllowedValues": [
+        "t2.micro",
+        "t2.medium",
+        "t2.large"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type.",
+      "Default": "t2.micro",
+      "Description": "EC2 instance type",
+      "Type": "String"
+    },
+    "keyName": {
+      "Description": "Select a valid pem file to use",
+      "Type": "AWS::EC2::KeyPair::KeyName"
     },
     "targetEnvironment": {
       "Default": "test",
       "Type": "String"
     },
     "myPublicIp": {
+      "Default": "0.0.0.0/0",
       "Description": "Your public IP address for Private Access",
-      "Type": "String",
-      "Default": "0.0.0.0/0"
+      "AllowedPattern" : "\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+",
+      "Type": "String"
     },
     "sslCertificateId": {
       "Description": "The ARN of your SSL Certificate Stored in IAM",
@@ -57,7 +91,7 @@
       "Default": "ENTER A VALID SSL CERTIFICATE ARN HERE"
     },
     "s3Bucket": {
-      "Default": "",
+      "Default": "some-bucket",
       "Description": "Existing S3 bucket to use for Jenkins backups and restores",
       "Type": "String"
     },
@@ -94,6 +128,7 @@
       "Properties": {
         "Parameters": {
           "myPublicIp": { "Ref": "myPublicIp" },
+          "keyName": { "Ref": "keyName" },
           "privateSubnet1": { "Fn::GetAtt": [ "vpcCreate", "Outputs.privateSubnet1" ]},
           "privateSubnet2": { "Fn::GetAtt": [ "vpcCreate", "Outputs.privateSubnet2" ] },
           "publicSubnet1": { "Fn::GetAtt": [ "vpcCreate", "Outputs.publicSubnet1" ] },
@@ -108,7 +143,8 @@
       "DependsOn": "vpcCreate",
       "Properties": {
         "Parameters": {
-          "keyName": "NT-Oregon",
+          "keyName": { "Ref": "keyName" },
+          "instanceType": { "Ref": "jenkinsInstanceType" },
           "myPublicIp": { "Ref": "myPublicIp" },
           "s3Bucket": { "Ref": "s3Bucket" },
           "publicSubnets": { "Fn::Join": [ ",", [
@@ -135,6 +171,7 @@
       "Properties": {
         "Parameters": {
           "myPublicIp": { "Ref": "myPublicIp" },
+          "KeyPair": { "Ref": "keyName" },
           "dynamicDynamoS3Bucket": { "Ref": "S3Bucket" },
           "dynamicDynamoS3BucketRegion": { "Ref": "S3BucketRegion" },
           "publicSubnets": { "Fn::Join": [ ",", [
@@ -279,12 +316,6 @@
       "Description": "Shared Infrastructure Log Group",
       "Value": {
         "Fn::GetAtt": [ "monitoring", "Outputs.infrastructureLogGroup" ]
-      }
-    },
-    "apiGwServiceSecurityGroup": {
-      "Description": "API Gateway Service Security Group referenced in other stacks",
-      "Value": {
-        "Fn::GetAtt": [ "vpcCreate", "Outputs.apiGwServiceSecurityGroup" ]
       }
     }
   }
